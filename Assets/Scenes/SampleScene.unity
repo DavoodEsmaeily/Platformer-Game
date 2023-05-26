@@ -157,7 +157,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0.5
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 3.5
   m_Material: {fileID: 6200000, guid: c777c75f8704d5c44b5103bd6c1dc52c, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -177,7 +177,7 @@ Transform:
   m_Children:
   - {fileID: 1805741600}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &208995356
 MonoBehaviour:
@@ -191,9 +191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbaefb1e695fc514f8fa133739311e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  jumpForce: 7
-  isMoving: 1
+  moveSpeed: 8
+  jumpForce: 12
+  groundCheckDistance: 1.4
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!70 &208995357
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -305,7 +308,7 @@ GameObject:
   - component: {fileID: 1493739133}
   - component: {fileID: 1493739132}
   - component: {fileID: 1493739131}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +406,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1778397891
 GameObject:
@@ -416,7 +419,7 @@ GameObject:
   - component: {fileID: 1778397893}
   - component: {fileID: 1778397892}
   - component: {fileID: 1778397894}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}

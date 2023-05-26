@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,11 @@ public class Player : MonoBehaviour
     private int FacingDir = 1;
     private bool flipReight = true;
 
+    [Header("Collision Info")]
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask whatIsGround;
+    private bool isGrounded;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +32,15 @@ public class Player : MonoBehaviour
     {
         Movement();
         CheckInput();
+        CollisionChecks();
 
         FlipController();
-
         AnimatorController();
+    }
+
+    private void CollisionChecks()
+    {
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
     }
 
     private void CheckInput()
@@ -49,6 +60,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
+        if(isGrounded)
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
@@ -56,7 +68,10 @@ public class Player : MonoBehaviour
     {
         // Animation Moving Player
         bool isMoving = rb.velocity.x != 0;
-        anim.SetBool("IsMoving", isMoving);
+        anim.SetFloat("yVelocity", rb.velocity.y);
+
+        anim.SetBool("isMoving", isMoving);
+        anim.SetBool("isGrounded", isGrounded);
     }
 
     private void Flip()
@@ -72,5 +87,10 @@ public class Player : MonoBehaviour
             Flip();
         else if (rb.velocity.x < 0 && flipReight)
             Flip();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, transform.position.y - groundCheckDistance));
     }
 }
