@@ -22,6 +22,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float dashDuration;
     [SerializeField] private float dashTime;
 
+    [Header("Attack info")]
+    [SerializeField] private bool isAttacking;
+    [SerializeField] private int comboCounter;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +44,9 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
             dashTime = dashDuration;
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            isAttacking = true;
 
         FlipController();
         AnimatorController();
@@ -74,6 +81,11 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
+    public void AttackOver()
+    {
+        isAttacking = false;
+    }
+
     private void AnimatorController()
     {
         // Animation Moving Player
@@ -83,6 +95,8 @@ public class Player : MonoBehaviour
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing" , dashTime > 0);
+        anim.SetBool("isAttack", isAttacking);
+        anim.SetInteger("comboCounter", comboCounter);
     }
 
     private void Flip()
