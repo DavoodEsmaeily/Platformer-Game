@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -20,6 +17,11 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
 
+    [Header("Dash Info")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,11 @@ public class Player : MonoBehaviour
         Movement();
         CheckInput();
         CollisionChecks();
+
+        dashTime -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            dashTime = dashDuration;
 
         FlipController();
         AnimatorController();
@@ -55,13 +62,16 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        if (dashTime > 0)
+            rb.velocity = new Vector2(xInput * dashSpeed, 0);
+        else
+            rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
     }
 
     private void Jump()
     {
-        if(isGrounded)
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        if (isGrounded)
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
     private void AnimatorController()
@@ -72,6 +82,7 @@ public class Player : MonoBehaviour
 
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGrounded);
+        anim.SetBool("isDashing" , dashTime > 0);
     }
 
     private void Flip()
