@@ -426,8 +426,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 8
   jumpForce: 12
-  dashSpeed: 25
-  dashDuration: 0.2
   groundCheck: {fileID: 135795355}
   groundCheckDistance: 0.15
   wallCheck: {fileID: 632501210}
@@ -435,6 +433,9 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  dashCoolDown: 1
+  dashSpeed: 25
+  dashDuration: 0.2
 --- !u!50 &1291632171
 Rigidbody2D:
   serializedVersion: 4

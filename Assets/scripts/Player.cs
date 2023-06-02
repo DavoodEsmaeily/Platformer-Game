@@ -9,8 +9,7 @@ public class Player : MonoBehaviour
     [Header("Move info")]
     [SerializeField] public float moveSpeed = 12f;
     [SerializeField] public float jumpForce = 1f;
-    [SerializeField] public float dashSpeed;
-    [SerializeField] public float dashDuration;
+
 
     [Header("Collision Info")]
     [SerializeField] private Transform groundCheck;
@@ -19,6 +18,14 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private LayerMask whatIsGround;
 
+    [Header("Dash Info")]
+    [SerializeField] private float dashCoolDown;
+    private float dashUsageTimer;
+
+    public float dashSpeed;
+    public float dashDuration;
+
+    public float dashDir { get; private set; }
 
     #region Components
     public Animator Anim { get; private set; }
@@ -59,6 +66,24 @@ public class Player : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.Update();
+        CheckForDashInpt();
+    }
+
+    private void CheckForDashInpt()
+    {
+        dashUsageTimer -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
+        {
+            dashUsageTimer = dashCoolDown;
+
+            dashDir = Input.GetAxis("Horizontal");
+
+            if (dashDir == 0)
+                dashDir = facingDir;
+
+            StateMachine.ChangeState(DashState);
+        }
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
@@ -70,15 +95,15 @@ public class Player : MonoBehaviour
     public bool IsGroundedDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
 
     public void Flip()
-    { 
+    {
         facingDir = facingDir * -1;
         facingRight = !facingRight;
-        transform.Rotate(0,180, 0);
+        transform.Rotate(0, 180, 0);
     }
 
     public void FlipController(float _x)
     {
-        if ( _x > 0 && !facingRight)
+        if (_x > 0 && !facingRight)
             Flip();
         else if (_x < 0 && facingRight)
             Flip();
