@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [Header("Move info")]
     [SerializeField] public float moveSpeed = 12f;
     [SerializeField] public float jumpForce = 1f;
+    [SerializeField] public float dashSpeed;
+    [SerializeField] public float dashDuration;
 
     [Header("Collision Info")]
     [SerializeField] private Transform groundCheck;
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour
     public PlayerMoveState MoveState { get; private set; }
     public PlayerAirState AirState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
+    public PlayerDashState DashState { get; private set; }
     #endregion
 
     private void Awake()
@@ -39,6 +42,7 @@ public class Player : MonoBehaviour
         MoveState = new PlayerMoveState(StateMachine, this, "move");
         JumpState = new PlayerJumpState(StateMachine, this, "jump");
         AirState = new PlayerAirState(StateMachine, this, "jump");
+        DashState = new PlayerDashState(StateMachine, this, "dash");
     }
 
 
@@ -55,7 +59,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState.Update();
-
     }
 
     public void SetVelocity(float xVelocity, float yVelocity)
